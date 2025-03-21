@@ -1,0 +1,27 @@
+import express from "express";
+import dotenv from "dotenv";
+import fileUpload from "express-fileupload";
+
+import { connectDB } from "./config/db.config.js";
+import userRoutes from "./routes/user.routes.js";
+
+dotenv.config();
+const app = express();
+connectDB();
+
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
+
+app.use("/api/v1/user", userRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server running on port http://localhost:${PORT}`);
+});

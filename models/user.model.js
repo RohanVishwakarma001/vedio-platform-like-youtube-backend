@@ -15,7 +15,6 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
-      unique: true,
     },
     password: {
       type: String,
@@ -25,7 +24,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    logId: {
+    logoId: {
       type: String,
       required: true,
     },

@@ -51,3 +51,41 @@ export const uploadVideo = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const updateVideo = async (req, res) => {
+  try {
+    const { title, description, category, tags } = req.body;
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    if (video.user_id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "You are not authorized" });
+    }
+
+    video.title = title || video.title;
+    video.description = description || video.description;
+    video.category = category || video.category;
+    video.tags = tags ? tags.split(",") : [] || video.tags;
+    if (req.files && req.files.thumbnailUrl) {
+      // Delete old thumbnail from Cloudinary
+      await cloudinary.uploader.destroy(video.thumbnailId, {
+        resource_type: "thumbnails/",
+      });
+      // Upload new thumbnail to Cloudinary
+
+      const thumbnailUpload = await cloudinary.uploader.upload(
+        req.files.thumbnailUrl.tempFilePath,
+        { folder: "thumbnails/" }
+      );
+      video.thumbnailUrl = thumbnailUpload.secure_url;
+      video.thumbnailId = thumbnailUpload.public_id;
+    }
+    await video.save();
+    res.status(200).json({ message: "Video updated successfully", video });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};

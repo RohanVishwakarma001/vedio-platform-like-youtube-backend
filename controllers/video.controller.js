@@ -123,3 +123,13 @@ export const deleteVideo = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const getAllVideos = async (req, res) => {
+  try {
+    const videos = await Video.find({}).populate("user_id");
+    res.status(200).json({ videos });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};

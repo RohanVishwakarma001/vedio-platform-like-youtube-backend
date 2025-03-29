@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import cloudinary from "../config/cloudinary.config.js";
 import User from "../models/user.model.js";
 
+/// 👉 @desc    Signup
 export const signup = async (req, res) => {
   const { channelName, email, phone, password } = req.body;
   try {
@@ -43,6 +44,7 @@ export const signup = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Login
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -93,6 +95,7 @@ export const login = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Logout
 export const logout = async (req, res) => {
   try {
     res.clearCookie("token");

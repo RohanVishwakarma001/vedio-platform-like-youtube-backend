@@ -4,6 +4,7 @@ import cloudinary from "../config/cloudinary.config.js";
 import User from "../models/user.model.js";
 import Video from "../models/video.model.js";
 
+/// 👉 @desc    Upload video
 export const uploadVideo = async (req, res) => {
   const { title, description, category, tags } = req.body;
 
@@ -52,6 +53,7 @@ export const uploadVideo = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Update video
 export const updateVideo = async (req, res) => {
   try {
     const { title, description, category, tags } = req.body;
@@ -92,6 +94,7 @@ export const updateVideo = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Delete video
 export const deleteVideo = async (req, res) => {
   try {
     const video = await Video.findById(req.params.id);
@@ -124,6 +127,7 @@ export const deleteVideo = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Get all videos
 export const getAllVideos = async (req, res) => {
   try {
     const videos = await Video.find({}).populate("user_id");
@@ -134,6 +138,7 @@ export const getAllVideos = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Get video by ID
 export const getVideoById = async (req, res) => {
   try {
     const video = await Video.findById(req.params.id).populate("user_id");
@@ -147,6 +152,7 @@ export const getVideoById = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Get my videos
 export const getMyVideos = async (req, res) => {
   try {
     const videos = await Video.find({ user_id: req.user._id }).populate(
@@ -159,6 +165,7 @@ export const getMyVideos = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Get video by category
 export const getVideoByCategory = async (req, res) => {
   try {
     const videos = await Video.find({ category: req.params.category }).populate(
@@ -170,6 +177,8 @@ export const getVideoByCategory = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+/// 👉 @desc    Get video by tag
 export const getVideoByTag = async (req, res) => {
   try {
     const videos = await Video.find({ tags: req.params.tag }).populate(
@@ -182,6 +191,7 @@ export const getVideoByTag = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Search videos
 export const searchVideos = async (req, res) => {
   try {
     const videos = await Video.find({
@@ -197,6 +207,8 @@ export const searchVideos = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+/// 👉 @desc    Get video by user
 export const getVideoByUser = async (req, res) => {
   try {
     const videos = await Video.find({ user_id: req.params.userId }).populate(
@@ -209,6 +221,7 @@ export const getVideoByUser = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Get liked videos
 export const getLikedVideos = async (req, res) => {
   try {
     const video = await Video.findById(req.params.id);
@@ -227,6 +240,7 @@ export const getLikedVideos = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Get disliked videos
 export const getDislikeVideo = async (req, res) => {
   try {
     const video = await Video.findById(req.params.id);
@@ -247,6 +261,7 @@ export const getDislikeVideo = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Add comment
 export const addComment = async (req, res) => {
   try {
     const video = await Video.findById(req.params.id);
@@ -263,6 +278,7 @@ export const addComment = async (req, res) => {
   }
 };
 
+/// 👉 @desc    Delete comment
 export const deleteComment = async (req, res) => {
   try {
     const video = await Video.findById(req.params.id);

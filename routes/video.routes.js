@@ -13,4 +13,9 @@ router.post("/upload", auth, uploadVideo);
 
 router.put("/update/:id", auth, updateVideo);
 
+/// 👉 @desc    Delete Video
+/// 👉 @route   DELETE /api/videos/:id
+
+router.delete("/delete/:id", auth, deleteVideo);
+
 export default router;

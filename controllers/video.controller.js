@@ -158,3 +158,124 @@ export const getMyVideos = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const getVideoByCategory = async (req, res) => {
+  try {
+    const videos = await Video.find({ category: req.params.category }).populate(
+      "user_id"
+    );
+    res.status(200).json({ videos });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+export const getVideoByTag = async (req, res) => {
+  try {
+    const videos = await Video.find({ tags: req.params.tag }).populate(
+      "user_id"
+    );
+    res.status(200).json({ videos });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const searchVideos = async (req, res) => {
+  try {
+    const videos = await Video.find({
+      $or: [
+        { title: { $regex: req.params.query, $options: "i" } },
+        { description: { $regex: req.params.query, $options: "i" } },
+        { tags: { $regex: req.params.query, $options: "i" } },
+      ],
+    }).populate("user_id");
+    res.status(200).json({ videos });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+export const getVideoByUser = async (req, res) => {
+  try {
+    const videos = await Video.find({ user_id: req.params.userId }).populate(
+      "user_id"
+    );
+    res.status(200).json({ videos });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const getLikedVideos = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+    if (video.likes.includes(req.user._id)) {
+      return res.status(400).json({ message: "You already liked this video" });
+    }
+    video.likes.push(req.user._id);
+    await video.save();
+    res.status(200).json({ message: "Video liked successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const getDislikeVideo = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+    if (!video.likes.includes(req.user._id)) {
+      return res.status(400).json({ message: "You have not liked this video" });
+    }
+    video.likes = video.likes.filter(
+      (like) => like.toString() !== req.user._id
+    );
+    await video.save();
+    res.status(200).json({ message: "Video disliked successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const addComment = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+    const { text } = req.body;
+    video.comments.push({ user_id: req.user._id, text });
+    await video.save();
+    res.status(200).json({ message: "Comment added successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const deleteComment = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+    video.comments = video.comments.filter(
+      (comment) => comment._id.toString() !== req.params.commentId
+    );
+    await video.save();
+    res.status(200).json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};

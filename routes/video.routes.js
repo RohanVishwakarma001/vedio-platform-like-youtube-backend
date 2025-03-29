@@ -3,6 +3,7 @@ import { auth } from "../middleware/auth.middleware.js";
 import {
   deleteVideo,
   getAllVideos,
+  getMyVideos,
   getVideoById,
   updateVideo,
   uploadVideo,
@@ -33,5 +34,9 @@ router.get("/all-videos", getAllVideos);
 /// 👉 @route   GET /api/videos/:id
 
 router.get("/:id", auth, getVideoById);
+
+/// 👉 @desc    Get Video by My Video
+/// 👉 @route   GET /api/videos/my-videos
+router.get("/my-videos", auth, getMyVideos);
 
 export default router;

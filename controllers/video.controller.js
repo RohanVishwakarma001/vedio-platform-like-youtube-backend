@@ -146,3 +146,15 @@ export const getVideoById = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const getMyVideos = async (req, res) => {
+  try {
+    const videos = await Video.find({ user_id: req.user._id }).populate(
+      "user_id"
+    );
+    res.status(200).json({ videos });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};

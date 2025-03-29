@@ -1,6 +1,12 @@
 import express from "express";
 import { auth } from "../middleware/auth.middleware.js";
-import { deleteVideo, updateVideo, uploadVideo } from "../controllers/video.controller.js";
+import {
+  deleteVideo,
+  getAllVideos,
+  getVideoById,
+  updateVideo,
+  uploadVideo,
+} from "../controllers/video.controller.js";
 
 const router = express.Router();
 
@@ -25,5 +31,7 @@ router.get("/all-videos", getAllVideos);
 
 /// 👉 @desc    Get Video by ID
 /// 👉 @route   GET /api/videos/:id
+
+router.get("/:id", auth, getVideoById);
 
 export default router;
